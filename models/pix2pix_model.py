@@ -12,20 +12,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import os
+import os.path
+import sys
+
+import h5py
 import numpy as np
 import torch
-import torch.nn as nn
 import torch.autograd as autograd
-import os
-from models import base_model
-from models import networks
-import sys
-import h5py
-import os.path
-from skimage.io import imsave
-from models import hourglass
-
+import torch.nn as nn
 import torchvision.utils as vutils
+from skimage.io import imsave
+
+from .base_model import BaseModel
+from .hourglass import HourglassModel
+from .networks import JointLoss, get_scheduler, print_network
 
 
 # torch.manual_seed(1)
@@ -60,7 +61,7 @@ class HourglassVariant(torch.nn.Module):
         return pred_d, pred_confidence
 
 
-class Pix2PixModel(base_model.BaseModel):
+class Pix2PixModel(BaseModel):
 
     def name(self):
         return 'Pix2PixModel'
@@ -83,7 +84,7 @@ class Pix2PixModel(base_model.BaseModel):
                 '======================================  DIW NETWORK TRAIN FROM %s======================='
                 % self.mode)
 
-            new_model = hourglass.HourglassModel(self.num_input)
+            new_model = HourglassModel(self.num_input)
 
             print(
                 '===================Loading Pretrained Model OURS ==================================='
@@ -118,13 +119,13 @@ class Pix2PixModel(base_model.BaseModel):
         self.netG.train()
 
         if True:
-            self.criterion_joint = networks.JointLoss(opt)
+            self.criterion_joint = JointLoss(opt)
             # initialize optimizers
             self.optimizer_G = torch.optim.Adam(
                 self.netG.parameters(), lr=opt.lr, betas=(0.9, 0.999))
-            self.scheduler = networks.get_scheduler(self.optimizer_G, opt)
+            self.scheduler = get_scheduler(self.optimizer_G, opt)
             print('---------- Networks initialized -------------')
-            networks.print_network(self.netG)
+            print_network(self.netG)
             print('-----------------------------------------------')
 
     def set_writer(self, writer):
