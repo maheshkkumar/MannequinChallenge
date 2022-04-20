@@ -80,15 +80,15 @@ class Pix2PixModel(BaseModel):
             raise ValueError("Unknown input type %s" % opt.input)
 
         if self.mode == 'Ours_Bilinear':
-            print(
-                '======================================  DIW NETWORK TRAIN FROM %s======================='
-                % self.mode)
+            # print(
+            #     '======================================  DIW NETWORK TRAIN FROM %s======================='
+            #     % self.mode)
 
             new_model = HourglassModel(self.num_input)
 
-            print(
-                '===================Loading Pretrained Model OURS ==================================='
-            )
+            # print(
+            #     '===================Loading Pretrained Model OURS ==================================='
+            # )
 
             if not _isTrain:
                 if self.num_input == 7:
@@ -124,9 +124,9 @@ class Pix2PixModel(BaseModel):
             self.optimizer_G = torch.optim.Adam(
                 self.netG.parameters(), lr=opt.lr, betas=(0.9, 0.999))
             self.scheduler = get_scheduler(self.optimizer_G, opt)
-            print('---------- Networks initialized -------------')
-            print_network(self.netG)
-            print('-----------------------------------------------')
+            # print('---------- Networks initialized -------------')
+            # print_network(self.netG)
+            # print('-----------------------------------------------')
 
     def set_writer(self, writer):
         self.writer = writer

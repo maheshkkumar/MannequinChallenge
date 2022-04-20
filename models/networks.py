@@ -12,12 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import functools
+
+import numpy as np
 import torch
+import torch.autograd as autograd
 import torch.nn as nn
 import torch.optim as optim
-import torch.autograd as autograd
-import numpy as np
-import functools
 
 ###############################################################################
 # Functions
